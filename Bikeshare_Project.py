@@ -1,4 +1,3 @@
-
 import time
 import pandas as pd
 import numpy as np
@@ -110,7 +109,7 @@ def load_data(city, month, day):
     df["hour"] = df["Start Time"].dt.hour
 
     if month != None:
-        month = month_text.index(month) 
+        month = month_text.index(month) +1
         df = df.loc[df["month"] == month]
 
     if day != None:
@@ -183,33 +182,32 @@ def trip_duration_stats(df):
     start_time = time.time()
 
     # display total travel time
-    df["Trip Duration"] = df["Trip Duration"] / 60
-    print("The total trip duration: ", df["Trip Duration"].sum())
+    print("The total trip duration in hours: ", df["Trip Duration"].sum()/3600)
 
     # display mean travel time
-    print("The mean trip duration: ",
-            df["Trip Duration"].sum() / df["Trip Duration"].count())
+    print("The mean trip duration in minutes: ", df["Trip Duration"].mean()/ 60)
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print("-" * 40)
 
 
-def user_stats(df):
+def user_stats(df, city):
     """Displays statistics on bikeshare users."""
 
     print("\nCalculating User Stats...\n")
     start_time = time.time()
 
     # Display counts of user types
-    type_count = df.groupby(["User Type"])["User Type"].count()
+    type_count = df["User Type"].value_counts()
     print("The counts of user types: ", type_count, "\n", "-"*10, "\n")
     # Display counts of gender
-    age_count = df.groupby(["Gender"])["Gender"].count()
-    print("The counts of gender: ", age_count, "\n", "-"*10, "\n")
-    # Display earliest, most recent, and most common year of birth
-    print("The earliest birth: ", df["Birth Year"].min(), "\n", "-"*10, "\n",
-            "The latest birth: ", df["Birth Year"].max(), "\n", "-"*10, "\n",
-            "The most common birth: ", df["Birth Year"].mode())
+    if city != 'washington':
+        age_count = df["Gender"].value_counts()
+        print("The counts of gender: ", age_count, "\n", "-"*10, "\n")
+        # Display earliest, most recent, and most common year of birth
+        print("The earliest birth: ", df["Birth Year"].min(), "\n", "-"*10, "\n",
+                "The latest birth: ", df["Birth Year"].max(), "\n", "-"*10, "\n",
+                "The most common birth: ", df["Birth Year"].mode())
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print("-" * 40)
@@ -224,7 +222,7 @@ def main():
         time_stats(df)
         station_stats(df)
         trip_duration_stats(df)
-        user_stats(df)
+        user_stats(df, city)
 
         restart = input("\nWould you like to restart? Enter yes or no.\n")
         if restart.lower() != "yes":
