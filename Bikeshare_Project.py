@@ -8,8 +8,7 @@ from pandas.core.tools.datetimes import to_datetime
 CITY_DATA = {
     "chicago": pd.read_csv("chicago.csv"),
     "new york": pd.read_csv("new_york_city.csv"),
-    "washington": pd.read_csv("washington.csv"),
-}
+    "washington": pd.read_csv("washington.csv")}
 month_text = ["january", "february", "march", "april", "may", "june"]
 day_text = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
 
@@ -17,13 +16,13 @@ day_text = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", 
 def get_filters():
     """
     Asks user to specify a city, month, and day to analyze.
-
     Returns:
         (str) city - name of the city to analyze
         (str) month - name of the month to filter by, or 'all' to apply no month filter
         (str) day - name of the day of week to filter by, or 'all' to apply no day filter
     """
     print("Hello! Let's explore some US bikeshare data!")
+    
     # get user input for city (chicago, new york city, washington)
     print("Would you like to see data for Chicago, New York, or Washington?")
     while True:
@@ -40,9 +39,7 @@ def get_filters():
                 break
 
     # ask user how they'd like to filter the date
-    print(
-        'Would you like to filter the data by month, day, both, or "none" for no time filter?'
-    )
+    print('Would you like to filter the data by month, day, both, or "none" for no time filter?')
     while True:
         try:
             date_filter = input("Specify the date filter:").lower()
@@ -109,7 +106,7 @@ def load_data(city, month, day):
     df["hour"] = df["Start Time"].dt.hour
 
     if month != None:
-        month = month_text.index(month) +1
+        month = month_text.index(month) + 1
         df = df.loc[df["month"] == month]
 
     if day != None:
@@ -200,11 +197,13 @@ def user_stats(df, city):
     # Display counts of user types
     type_count = df["User Type"].value_counts()
     print("The counts of user types: ", type_count, "\n", "-"*10, "\n")
+    
     # Display counts of gender
     if city != 'washington':
         age_count = df["Gender"].value_counts()
         print("The counts of gender: ", age_count, "\n", "-"*10, "\n")
-        # Display earliest, most recent, and most common year of birth
+    
+    # Display earliest, most recent, and most common year of birth
         print("The earliest birth: ", df["Birth Year"].min(), "\n", "-"*10, "\n",
                 "The latest birth: ", df["Birth Year"].max(), "\n", "-"*10, "\n",
                 "The most common birth: ", df["Birth Year"].mode())
